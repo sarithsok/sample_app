@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   before_filter :admin_user,   :only => :destroy
 
   def new
+    deny_access_for_signed_in_user
   	@user = User.new
   	@title = "Sign up"
   end
@@ -19,6 +20,7 @@ class UsersController < ApplicationController
   end
 
   def create
+    deny_access_for_signed_in_user
   	@user = User.new(params[:user])
   	if @user.save
       sign_in @user
@@ -48,8 +50,13 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
+    user = User.find(params[:id])
+    if (current_user == user) && user.admin?
+      flash[:success] = "You cannot destroy yourself."      
+    else
+      user.destroy
+      flash[:success] = "User destroyed."
+    end    
     redirect_to users_path
   end
 
@@ -66,5 +73,9 @@ class UsersController < ApplicationController
 
     def admin_user
       redirect_to(root_path) unless current_user.admin?
+    end
+
+    def deny_access_for_signed_in_user
+      redirect_to(root_path) if signed_in?
     end
 end

@@ -325,4 +325,21 @@ describe UsersController do
       end
     end
   end
+
+  describe "DELETE link" do
+
+    it "should not appear if the user is normal user" do
+      user = Factory(:user)
+      test_sign_in(user)
+      get :index, :id => user
+      response.should_not have_selector('a', :content => 'delete')
+    end
+
+    it "should appear if the signed-in user is admin" do
+      admin = Factory(:user, :email => "admin@example.com", :admin => true)
+      test_sign_in(admin)
+      get :index, :id => admin
+      response.should have_selector('a', :content => 'delete')
+    end
+  end
 end
