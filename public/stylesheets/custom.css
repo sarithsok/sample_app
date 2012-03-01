@@ -253,4 +253,10 @@ form.new_micropost textarea {
 	height: 4em;
 	margin-bottom: 0;
 }
-
+#char_count {
+	float: right;
+	margin-right: 38px;
+}
+#micropost {
+	float: left;
+}

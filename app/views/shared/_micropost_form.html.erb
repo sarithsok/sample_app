@@ -1,3 +1,19 @@
+<script type="text/javascript">
+$(function() {
+	$('#micropost_content').bind('input paste', function() {
+		var content_length = $(this).val().length;
+		var remaining = 140 - content_length
+		$('#char_count').html(remaining);		
+
+		if (content_length > 0) {
+			$('#micropost_submit').removeAttr("disabled");
+		} else {
+			$('#micropost_submit').attr("disabled", "true");
+		}
+
+	});
+});
+</script>
 <%= form_for @micropost do |f| %>
 	<%= render 'shared/error_messages', :object => f.object %>
 	<div class="field">
