@@ -24,3 +24,7 @@ SampleApp::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 end
 
+silence_warnings do
+  require 'pry'
+  IRB = Pry
+end
